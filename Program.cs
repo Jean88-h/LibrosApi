@@ -6,21 +6,25 @@ using Uttt.Micro.Libro.Persistencia;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurar el puerto (necesario para Railway)
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+
 // Agregar servicios personalizados (incluye DbContext, controladores, FluentValidation, MediatR, AutoMapper)
 builder.Services.AddCustomServices(builder.Configuration);
 
 // Configurar Swagger y OpenAPI
-builder.Services.AddSwaggerGen(); // Swashbuckle
+builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(typeof(Nuevo.Manejador).Assembly);
 
-// Configurar CORS para React
+// Configurar CORS para React (sin slash final en la URL)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirReact", policy =>
     {
         policy.WithOrigins(
                 "http://localhost:3000",
-                "https://api-libro-lgojqdihs-val88s-projects-3e12ef5a.vercel.app/"  // <-- Reemplaza con la URL de tu frontend desplegado en Vercel
+                "https://api-libro-lgojqdihs-val88s-projects-3e12ef5a.vercel.app"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
@@ -32,7 +36,6 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Usar CORS
 app.UseCors("PermitirReact");
 
 app.UseHttpsRedirection();
