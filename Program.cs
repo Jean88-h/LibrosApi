@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
                 "http://localhost:3000",
-                "https://api-libro-lgojqdihs-val88s-projects-3e12ef5a.vercel.app"
+                "https://api-libro-58bh9kx9v-val88s-projects-3e12ef5a.vercel.app"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
